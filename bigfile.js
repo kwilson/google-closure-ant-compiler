@@ -1,6 +1,6 @@
-(function(public) {
+(function(PUBLIC) {
 
-    public.Shout = function(message) {
+    PUBLIC.Shout = function(message) {
         outputMessage(message);
     };
 
