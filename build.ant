@@ -15,7 +15,7 @@
 
     <target name="compile">
     
-        <jscomp compilationLevel="simple" warning="verbose" debug="false" output="bigfile.js">
+        <jscomp compilationLevel="simple" warning="verbose" debug="false" output="output.js">
 
             <sources dir="${basedir}">
                 <file name="bigfile.js"/>
