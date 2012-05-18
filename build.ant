@@ -18,8 +18,9 @@
         <jscomp compilationLevel="simple" warning="verbose" debug="false" output="output.js">
 
             <sources dir="${basedir}">
-                <file name="bigfile.js"/>
-                <file name="bigfile2.js"/>
+                <fileset dir="${src}">
+                    <include name="**/*.js"/>
+                </fileset>
             </sources>
 
         </jscomp>
