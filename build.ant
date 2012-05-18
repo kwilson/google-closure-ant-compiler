@@ -15,12 +15,10 @@
 
     <target name="compile">
     
-        <jscomp compilationLevel="simple" warning="verbose" debug="false" output="output.js">
+        <jscomp compilationLevel="simple" warning="verbose" debug="false" output="bigfile.js">
 
             <sources dir="${basedir}">
-                <fileset dir="${src}">
-                    <include name="**/*.js"/>
-                </fileset>
+                <file name="*.js"/>
             </sources>
 
         </jscomp>
