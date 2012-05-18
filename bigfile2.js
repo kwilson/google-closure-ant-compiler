@@ -1,4 +1,4 @@
-var bigFile = (function() {
+var bigFile2 = (function() {
 
     var shout = function(message) {
         outputMessage(message);
