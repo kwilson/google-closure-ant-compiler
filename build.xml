@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<project basedir="." default="run">
+
+    <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="compiler.jar"/>
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${basedir}/ant-contrib/ant-contrib-0.3.jar"/>
+        </classpath>
+    </taskdef>
+
+    <target name="run">
+        <foreach target="compile" param="foreach.file">
+            <path>
+                <fileset dir="${basedir}" casesensitive="yes">
+                    <include name="**/*.js"/>
+                </fileset>
+            </path>
+        </foreach>
+    </target>
+
+    <target name="compile">
+        <basename property="file.js" file="${foreach.file}"/>
+
+        <!-- Using Javascript functions to work out the paths -->
+        <script language="javascript"> <![CDATA[
+
+            // get values
+            fullPath = project.getProperty("foreach.file");
+            fileOnly = project.getProperty("file.js");
+
+            pathOnly = fullPath.substring(0, fullPath.indexOf(fileOnly));
+
+            // store the result in a new property
+            project.setProperty("directory",pathOnly);
+
+        ]]> </script>
+
+        <echo message="Compressing file ${file.js} in ${directory}" />
+    
+        <jscomp compilationLevel="simple" warning="verbose" debug="false" output="${foreach.file}">
+
+            <sources dir="${directory}">
+                <file name="${file.js}"/>
+            </sources>
+
+        </jscomp>
+    
+    </target>
+
+</project>
