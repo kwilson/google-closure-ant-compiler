@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<project default="run">
+<project basedir="." default="run">
 
     <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="build-lib/compiler.jar"/>
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
-            <pathelement location="build-lib/ant-contrib/ant-contrib-0.3.jar"/>
+            <pathelement location="${basedir}/build-lib/ant-contrib/ant-contrib-0.3.jar"/>
         </classpath>
     </taskdef>
 
