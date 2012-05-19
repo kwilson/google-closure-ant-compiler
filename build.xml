@@ -2,7 +2,6 @@
 <project basedir="." default="run">
 
     <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="build-lib/compiler.jar"/>
-        <echo message="Looking for contrib in ${basedir}/build-lib/ant-contrib/ant-contrib-0.3.jar" />
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
             <pathelement location="${basedir}/build-lib/ant-contrib/ant-contrib-1.0b3.jar"/>
