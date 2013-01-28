@@ -1,50 +1,43 @@
 <?xml version="1.0"?>
 <project basedir="." default="run">
 
-    <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="build-lib/compiler.jar"/>
-    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
-        <classpath>
-            <pathelement location="${basedir}/build-lib/ant-contrib/ant-contrib-1.0b3.jar"/>
-        </classpath>
-    </taskdef>
+  <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="build-lib/compiler.jar"/>
+  <taskdef resource="net/sf/antcontrib/antlib.xml">
+    <classpath>
+      <pathelement location="${basedir}/build-lib/ant-contrib/ant-contrib-1.0b3.jar"/>
+    </classpath>
+  </taskdef>
 
-    <target name="run">
-        <foreach target="compile" param="foreach.file">
-            <path>
-                <fileset dir="${basedir}" casesensitive="yes">
-                    <include name="**/*.js"/>
-                </fileset>
-            </path>
-        </foreach>
-    </target>
+  <target name="run">
+    <echo message="Searching for files ${jsCompressionWildcard} in ${jsCompressionRootDirectory}." />
+    <for param="filename" keepgoing="true">
+      <path>
+        <fileset dir="${basedir}" casesensitive="yes">
+          <include name="**/*.js"/>
+        </fileset>
+      </path>
+      <sequential>
 
-    <target name="compile">
-        <basename property="file.js" file="${foreach.file}"/>
+        <!-- This gets the filename without the directory path. -->
+        <basename property="file.@{filename}" file="@{filename}"/>
 
-        <!-- Using Javascript functions to work out the paths -->
-        <script language="javascript"> <![CDATA[
+        <propertyregex property="directory.@{filename}"
+                input="@{filename}"
+                regexp="^(.+)\\([^\\]+)$"
+                select="\1"
+                casesensitive="false" />
 
-            // get values
-            fullPath = project.getProperty("foreach.file");
-            fileOnly = project.getProperty("file.js");
+        <echo message="Compressing file ${file.@{filename}} in ${directory.@{filename}}" />
 
-            pathOnly = fullPath.substring(0, fullPath.indexOf(fileOnly));
+        <jscomp compilationLevel="simple" debug="false" output="${directory.@{filename}}\${file.@{filename}}" forceRecompile="true">
 
-            // store the result in a new property
-            project.setProperty("directory",pathOnly);
-
-        ]]> </script>
-
-        <echo message="Compressing file ${file.js} in ${directory}" />
-    
-        <jscomp compilationLevel="simple" warning="verbose" debug="false" output="${directory}\${foreach.file}" forceRecompile="true">
-
-            <sources dir="${directory}">
-                <file name="${file.js}"/>
-            </sources>
+          <sources dir="${directory.@{filename}}">
+            <file name="${file.@{filename}}"/>
+          </sources>
 
         </jscomp>
-    
-    </target>
+      </sequential>
+    </for>
+  </target>
 
 </project>
