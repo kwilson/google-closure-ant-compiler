@@ -37,7 +37,7 @@
 
         <echo message="Compressing file ${file.js} in ${directory}" />
     
-        <jscomp compilationLevel="simple" warning="verbose" debug="false" output="${foreach.file}">
+        <jscomp compilationLevel="simple" warning="verbose" debug="false" output="${directory}\${foreach.file}" forceRecompile="true">
 
             <sources dir="${directory}">
                 <file name="${file.js}"/>
