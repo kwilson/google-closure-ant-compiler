@@ -17,23 +17,28 @@
           <include name="**/*.js"/>
         </fileset>
       </path>
-      
-			<sequential>
-				<!-- This gets the filename without the directory path. -->
-				<basename property="file.@{filename}" file="@{filename}" />
-				<basename property="prefix.@{filename}" file="@{filename}" suffix=".js"/>
-				<dirname property="directory.@{filename}" file="@{filename}"/>
-
-				<echo message="Compressing file ${file.@{filename}} to ${directory.@{filename}}/${prefix.@{filename}}.min.js" />
-
-				<jscomp compilationLevel="simple" debug="false" output="${directory.@{filename}}/${prefix.@{filename}}.min.js" forceRecompile="true">
-
-					<sources dir="${directory.@{filename}}">
-						<file name="${file.@{filename}}" />
-					</sources>
-
-				</jscomp>
-			</sequential>
+		<sequential>
+			<!-- This gets the filename without the directory path. -->
+			<basename property="file.@{filename}" file="@{filename}" />
+			<basename property="prefix.@{filename}" file="@{filename}" suffix=".js" />
+			<dirname property="directory.@{filename}" file="@{filename}" />
+			<available property="present.@{filename}" file="${directory.@{filename}}/${prefix.@{filename}}.min.js" />
+	
+			<if>
+				<equals arg1="${present.@{filename}}" arg2="true" />
+				<then>
+					<echo message="File ${directory.@{filename}}/${prefix.@{filename}}.min.js exists" />
+				</then>
+				<else>
+					<echo message="Compressing file ${file.@{filename}} to ${directory.@{filename}}/${prefix.@{filename}}.min.js" />
+					<jscomp compilationLevel="simple" debug="false" output="${directory.@{filename}}/${prefix.@{filename}}.min.js" forceRecompile="true">
+						<sources dir="${directory.@{filename}}">
+							<file name="${file.@{filename}}" />
+						</sources>
+					</jscomp>
+				</else>
+			</if>
+		</sequential>
     </for>
   </target>
 
