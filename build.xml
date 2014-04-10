@@ -13,30 +13,27 @@
     <for param="filename" keepgoing="true">
       <path>
         <fileset dir="${basedir}" casesensitive="yes">
+					<exclude name="**/*.min.js" />
           <include name="**/*.js"/>
         </fileset>
       </path>
-      <sequential>
+      
+			<sequential>
+				<!-- This gets the filename without the directory path. -->
+				<basename property="file.@{filename}" file="@{filename}" />
+				<basename property="prefix.@{filename}" file="@{filename}" suffix=".js"/>
+				<dirname property="directory.@{filename}" file="@{filename}"/>
 
-        <!-- This gets the filename without the directory path. -->
-        <basename property="file.@{filename}" file="@{filename}"/>
+				<echo message="Compressing file ${file.@{filename}} to ${directory.@{filename}}/${prefix.@{filename}}.min.js" />
 
-        <propertyregex property="directory.@{filename}"
-                input="@{filename}"
-                regexp="^(.+)\\([^\\]+)$"
-                select="\1"
-                casesensitive="false" />
+				<jscomp compilationLevel="simple" debug="false" output="${directory.@{filename}}/${prefix.@{filename}}.min.js" forceRecompile="true">
 
-        <echo message="Compressing file ${file.@{filename}} in ${directory.@{filename}}" />
+					<sources dir="${directory.@{filename}}">
+						<file name="${file.@{filename}}" />
+					</sources>
 
-        <jscomp compilationLevel="simple" debug="false" output="${directory.@{filename}}\${file.@{filename}}" forceRecompile="true">
-
-          <sources dir="${directory.@{filename}}">
-            <file name="${file.@{filename}}"/>
-          </sources>
-
-        </jscomp>
-      </sequential>
+				</jscomp>
+			</sequential>
     </for>
   </target>
 
